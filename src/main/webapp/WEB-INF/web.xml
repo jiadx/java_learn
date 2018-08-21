@@ -27,5 +27,8 @@
                 不能根据jsp页面找到handler，会报错
         -->
         <url-pattern>*.action</url-pattern>
+        <url-pattern>*.html</url-pattern>
+        <url-pattern>/</url-pattern>
+        <url-pattern>*.htm</url-pattern>
     </servlet-mapping>
 </web-app>
