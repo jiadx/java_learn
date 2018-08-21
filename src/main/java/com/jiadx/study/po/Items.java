@@ -1,4 +1,4 @@
-package com.jiadx.po;
+package com.jiadx.study.po;
 
 import java.util.Date;
 
