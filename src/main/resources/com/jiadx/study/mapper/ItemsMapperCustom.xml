@@ -18,8 +18,7 @@
     <!-- parameterType传入包装对象(包装了查询条件)
         resultType建议使用扩展对象
      -->
-    <select id="findItemsList" parameterType="com.jiadx.study.po.ItemsQueryVo"
-            resultType="com.jiadx.study.po.ItemsCustom">
+    <select id="findItemsList" parameterType="com.jiadx.study.po.ItemsQueryVo" resultType="com.jiadx.study.po.ItemsCustom">
         SELECT items.* FROM items
         <where>
             <include refid="query_items_where"></include>
