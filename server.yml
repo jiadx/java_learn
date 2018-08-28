@@ -1,0 +1,16 @@
+version: "2"
+services:
+  umif-mongodb:
+    image: 123.103.9.196:11245/library/mongo3.4:2.0.0
+    container_name: umif-mongodb
+    volumes:
+    - "./common/mongod:/data/db"
+    ports:
+    - "27017:27017"
+    restart: always
+
+  mysql:
+    image: 123.103.9.196:11245/library/mysql5.7:2.0.0
+    container_name: mysql
+    volumes: - "./common/mysql:/var/lib/mysql"
+    ports: - "3306:3306"

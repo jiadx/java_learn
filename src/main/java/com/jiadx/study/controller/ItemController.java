@@ -7,10 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@RequestMapping("/items")
+@RequestMapping("/item")
 public class ItemController {
     @Autowired
     private ItemsService itemsService;
@@ -34,6 +35,41 @@ public class ItemController {
         //下边的路径配置就可以不在程序中指定jsp路径的前缀和后缀
         modelAndView.setViewName("items/itemsList");
 
+        return modelAndView;
+    }
+
+    //商品信息修改页面显示
+    @RequestMapping("/editItems")
+    //限制http请求方法，可以post和get
+    //@RequestMapping(value="/editItems",method={RequestMethod.POST, RequestMethod.GET})
+    public ModelAndView editItems() throws Exception {
+
+        //调用service根据商品id查询商品信息
+        ItemsCustom itemsCustom = itemsService.findItemsById(1);
+
+        // 返回ModelAndView
+        ModelAndView modelAndView = new ModelAndView();
+
+        //将商品信息放到model
+        modelAndView.addObject("itemsCustom", itemsCustom);
+
+        //商品修改页面
+        modelAndView.setViewName("items/editItems");
+
+        return modelAndView;
+    }
+
+    //商品信息修改提交
+    @RequestMapping("/editItemsSubmit")
+    public ModelAndView editItemsSubmit(HttpServletRequest request, Integer id, ItemsCustom itemsCustom) throws Exception {
+
+        //调用service更新商品信息，页面需要将商品信息传到此方法
+        itemsService.updateItems(id, itemsCustom);
+
+        //返回ModelAndView
+        ModelAndView modelAndView = new ModelAndView();
+        //返回一个成功页面
+        modelAndView.setViewName("success");
         return modelAndView;
     }
 }

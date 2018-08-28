@@ -1,0 +1,93 @@
+version: "3"
+
+services:
+
+  nginx:
+    image: 123.103.9.196:11245/library/nginx1.9.14:1.0.0
+    volumes:
+    - "./common/nginx/nginx.conf:/usr/local/nginx/conf/nginx.conf"
+    ports:
+    - "3000:3000"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  umif_01:
+    image: 123.103.9.196:11245/library/node8.9.1:3.0.0
+    volumes: - "./common/umif:/umif"
+    ports: - "5000:5000"
+    command: ["npm", "start"]
+    environment:
+    - PORT=5000
+    - DB_1_PORT_27017_TCP_ADDR=172.20.26.60:27017
+    - NODE_ENV=production
+    - TZ=Asia/Shanghai
+    deploy:
+      resources:
+        limits:
+          cpus: '0.8'
+        reservations:
+          cpus: '0.1'
+
+  umif_02:
+    image: 123.103.9.196:11245/library/node8.9.1:3.0.0
+    volumes: - "./common/umif:/umif"
+    ports: - "5001:5001"
+    command: ["npm", "start"]
+    environment:
+    - PORT=5001
+    - DB_1_PORT_27017_TCP_ADDR=172.20.26.60:27017
+    - NODE_ENV=production
+    - TZ=Asia/Shanghai
+    deploy:
+      resources:
+        limits:
+          cpus: '0.8'
+        reservations:
+          cpus: '0.1'
+
+  test_umif:
+    image: 123.103.9.196:11245/library/node8.9.1:3.0.0
+    volumes: - "./common/test_umif:/umif"
+    ports: - "4100:4100"
+    command: ["npm", "start"]
+    environment:
+    - PORT=4100
+    - DB_1_PORT_27017_TCP_ADDR=172.20.26.60:27017
+    - NODE_ENV=production
+    - TZ=Asia/Shanghai
+    deploy:
+      resources:
+        limits:
+          cpus: '0.8'
+        reservations:
+          cpus: '0.1'
+
+  gateway:
+    image: 123.103.9.196:11245/library/node8.9.1:3.0.0
+    volumes: - "./common/gateway:/umif"
+    ports: - "3001:3001"
+    command: ["npm", "start"]
+    environment:
+    - DB_1_PORT_27017_TCP_ADDR=172.20.26.60:27017
+    - NODE_ENV=production
+    - PORT=3001
+    - TZ=Asia/Shanghai
+
+  print:
+    image: 123.103.9.196:11245/library/tomcat8:2.0.0
+    volumes:
+    - "./common/print/webapps:/usr/local/tomcat/webapps"
+    - "./common/print/conf/catalina.properties:/usr/local/tomcat/conf/catalina.properties"
+    - "./common/print/conf/server.xml:/usr/local/tomcat/conf/server.xml"
+    - "./common/print/bin/setenv.sh:/usr/local/tomcat/bin/setenv.sh"
+    ports:
+    - "8080:8080"
+    command: ["catalina.sh", "run"]
+
+  web_scoket:
+    image: 123.103.9.196:11245/library/java8:1.0.0
+    ports:
+    - "3002:8088"
+
+
